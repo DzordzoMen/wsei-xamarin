@@ -9,6 +9,6 @@
         Text="Details Page"
         HorizontalOptions="Center"
         VerticalOptions="Center"
-        Clicked="GoToDetailsPage"
+        Command="{ Binding GoToDetailsPage }"
     ></Button>
 </ContentPage>
