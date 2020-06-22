@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Style TargetType="Label" x:Key="CaqiDescription">
+        <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style TargetType="StackLayout" x:Key="MainPageStackLayout">
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="Spacing" Value="12" />
+    </Style>
+    
+    <Style TargetType="Frame" x:Key="CAQIFrameStyle">
+        <Setter Property="CornerRadius" Value="50" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HeightRequest" Value="100" />
+        <Setter Property="WidthRequest" Value="100" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="BackgroundColor" Value="{ StaticResource CAQIBackgroundColor }" />
+        <Setter Property="BorderColor" Value="{ StaticResource CAQIBorderColor }" />
+    </Style>
+    
+    <Style TargetType="Label" x:Key="CenteredText">
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+    </Style>
+    
+    <Style TargetType="Span" x:Key="CAQIValueSpan">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{ StaticResource PrimaryColor }" />
+        <Setter Property="FontSize" Value="32" />
+    </Style>
+    
+    <Style TargetType="Span" x:Key="CAQIUnitSpan">
+        <Setter Property="TextColor" Value="{ StaticResource SecondaryColor }" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+    
+    <Style TargetType="Label" x:Key="CAQITitle">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{ StaticResource PrimaryColor }" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+    
+    <Style TargetType="Label" x:Key="CAQIDescription">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryColor }" />
+    </Style>
+    
+    <Style TargetType="BoxView" x:Key="HorizontalDivider">
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="BackgroundColor" Value="{ StaticResource DividerColor }" />
+    </Style>
+    
+    <Style TargetType="BoxView" x:Key="VerticalDivider">
+        <Setter Property="WidthRequest" Value="1" />
+        <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="BackgroundColor" Value="{ StaticResource DividerColor }" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Slider" x:Key="SliderStyle">
+        <Setter Property="MaximumTrackColor" Value="{ StaticResource SecondaryColor }" />
+        <Setter Property="MinimumTrackColor" Value="{ StaticResource SliderAccentColor }" />
+        <Setter Property="ThumbColor" Value="{ StaticResource SliderAccentColor }" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="NormalTextLabel">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{ StaticResource PrimaryColor }" />
+    </Style>
+
+    <Style TargetType="Span" x:Key="NormalTextSpan">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{ StaticResource PrimaryColor }" />
+    </Style>
+
+    <Style TargetType="Span" x:Key="SmallTextSpan">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{ StaticResource PrimaryColor }" />
+    </Style>
+
+    <Style TargetType="ImageButton" x:Key="ButtonStyle">
+        <Setter Property="Padding" Value="12,24" />
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="WidthRequest" Value="48" />
+        <Setter Property="HeightRequest" Value="72" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+</ResourceDictionary>
