@@ -19,6 +19,15 @@ namespace AirMonitor.ViewModels {
     class HomeViewModel: BaseViewModel {
         private INavigation _navigation;
         private Location _userLocation = new Location(50.049683, 19.944544);
+        private Boolean _isLoading = false;
+        public Boolean IsLoading {
+            get { return _isLoading; }
+            set {
+                if (_isLoading == value) return;
+                _isLoading = value;
+                ExecutePropertyChanged("IsLoading");
+            }
+        }
 
         private List<Measurement> _measurments;
 
@@ -28,12 +37,14 @@ namespace AirMonitor.ViewModels {
         }
 
         private async Task Init() {
+            IsLoading = true;
             await GetLocation();
             var installations = await GetNearestInstallations();
             if (installations != null) {
                 var data = await GetInstallationsInfo(installations);
                 Measurments = new List<Measurement>(data);
             }
+            IsLoading = false;
         }
 
         public List<Measurement> Measurments {
