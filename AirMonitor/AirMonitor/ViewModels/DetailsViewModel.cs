@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AirMonitor.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace AirMonitor.ViewModels
@@ -138,7 +140,29 @@ namespace AirMonitor.ViewModels
             }
         }
 
-        public DetailsViewModel() { }
+        public DetailsViewModel(Measurement measurement) {
+            if (measurement.Current != null) {
+                var index = measurement.Current.Indexes.FirstOrDefault(ind => ind.Name == "AIRLY_CAQI");
+                CaqiValue = (int)index.Value;
+                CaqiTitle = index.Description;
+                CaqiDescription = index.Advice;
+
+                Pm25Value = (int)measurement.Current.Values.FirstOrDefault(val => val.Name == "PM25").Value;
+                Pm10Value = (int)measurement.Current.Values.FirstOrDefault(val => val.Name == "PM10").Value;
+
+                Pm25Percent = (int)measurement.Current.Standards.FirstOrDefault(standard => standard.Pollutant == "PM25").Percent;
+                Pm10Percent = (int)measurement.Current.Standards.FirstOrDefault(standard => standard.Pollutant == "PM10").Percent;
+
+                WetnessValue = (int)measurement.Current.Values.FirstOrDefault(val => val.Name == "HUMIDITY").Value;
+                PressureValue = (int)measurement.Current.Values.FirstOrDefault(val => val.Name == "PRESSURE").Value;
+
+
+            }
+        }
+
+        public DetailsViewModel() {
+
+        }
 
     }
 }

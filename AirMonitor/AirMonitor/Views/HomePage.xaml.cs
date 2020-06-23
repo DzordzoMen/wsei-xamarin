@@ -16,5 +16,10 @@ namespace AirMonitor.Views {
             InitializeComponent();
             BindingContext = new HomeViewModel(Navigation);
         }
+
+        void Select(object sender, ItemTappedEventArgs e) {
+            var tt = (HomeViewModel)BindingContext;
+            tt.GoToDetailsPage.Execute(e.Item as Measurement);
+        }
     }
 }

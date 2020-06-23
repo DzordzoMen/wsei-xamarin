@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AirMonitor.Classes {
-    class Measurement {
-        public DateTime FromDateTime { get; set; }
-        public DateTime TillDateTime { get; set; }
-        public MeasurementValue Values { get; set; }
-        public MeasurementIndex Indexes { get; set; }
-        public MeasurementStandard Standards { get; set; }
+    public class Measurement {
+        public MeasurementItem Current { get; set; }
+        public MeasurementItem[] History { get; set; }
+        public MeasurementItem[] Forecast { get; set; }
         public Installation Installation { get; set; }
     }
 }

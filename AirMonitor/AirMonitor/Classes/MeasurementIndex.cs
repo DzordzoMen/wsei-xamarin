@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AirMonitor.Classes {
-    class MeasurementIndex {
+    public class MeasurementIndex {
         public string Name { get; set; }
         public Double Value { get; set; }
         public string Level { get; set; }

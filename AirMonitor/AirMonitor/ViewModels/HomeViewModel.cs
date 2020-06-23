@@ -1,6 +1,7 @@
 ﻿using AirMonitor.Classes;
 using AirMonitor.Views;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,7 +45,11 @@ namespace AirMonitor.ViewModels {
             }
         }
 
-        public ICommand GoToDetailsPage => new Command(async () => await _navigation.PushAsync(new DetailsPage()));
+        public ICommand GoToDetailsPage => new Command<Measurement>(GoToDetailsPageWithData);
+
+        private void GoToDetailsPageWithData(Measurement measurement) {
+            _navigation.PushAsync(new DetailsPage(measurement));
+        }
 
         private async Task GetLocation() {
             try {
@@ -145,6 +150,7 @@ namespace AirMonitor.ViewModels {
                 var response = await client.GetAsync(url);
                 if ((int)response.StatusCode == 200) {
                     var content = await response.Content.ReadAsStringAsync();
+                    var tt = JObject.Parse(content);
                     var result = JsonConvert.DeserializeObject<Measurement>(content);
                     result.Installation = installation;
                     measurements.Add(result);

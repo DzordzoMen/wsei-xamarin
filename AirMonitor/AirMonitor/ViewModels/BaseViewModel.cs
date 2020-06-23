@@ -10,8 +10,8 @@ namespace AirMonitor.ViewModels {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void ExecutePropertyChanged(string propName) {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
+        public void ExecutePropertyChanged(string propName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }
