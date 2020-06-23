@@ -1,14 +1,18 @@
-﻿using AirMonitor.ViewModels;
+﻿using AirMonitor.Classes;
+using AirMonitor.ViewModels;
+using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace AirMonitor.Views
-{
+namespace AirMonitor.Views {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPage
-    {
-        public HomePage()
-        {
+    public partial class HomePage : ContentPage {
+
+        public HomePage() {
             InitializeComponent();
             BindingContext = new HomeViewModel(Navigation);
         }
