@@ -14,9 +14,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace AirMonitor.ViewModels {
-    class HomeViewModel {
+    class HomeViewModel: BaseViewModel {
         private INavigation _navigation;
         private Location _userLocation = new Location(50.049683, 19.944544);
+
+        private IEnumerable<Measurement> MeasurmentList;
+
+        private IEnumerable<Installation> Installations;
 
         public HomeViewModel(INavigation navigation) {
             _navigation = navigation;
@@ -24,7 +28,7 @@ namespace AirMonitor.ViewModels {
         }
 
         private async Task Init() {
-            GetLocation();
+            await GetLocation();
             string urlProps = GetQuery(new Dictionary<string, object>() {
                 { "lat", _userLocation.Latitude },
                 { "lng", _userLocation.Longitude },
@@ -33,8 +37,10 @@ namespace AirMonitor.ViewModels {
             });
             string path = "installations/nearest";
             var installations = await GetNearestInstallations(path, urlProps);
+            Installations = installations;
             if (installations != null) {
                 var data = await GetInstallationsInfo(installations);
+                MeasurmentList = data;
                 System.Diagnostics.Debug.WriteLine(data);
             }
         }

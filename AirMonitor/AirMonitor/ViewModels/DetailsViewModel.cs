@@ -5,8 +5,7 @@ using System.Text;
 
 namespace AirMonitor.ViewModels
 {
-    class DetailsViewModel : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
+    class DetailsViewModel : BaseViewModel {
         private int _caqiValue = 57;
         public int CaqiValue {
             set {
@@ -140,11 +139,6 @@ namespace AirMonitor.ViewModels
         }
 
         public DetailsViewModel() { }
-
-
-        private void ExecutePropertyChanged(string propName) {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
 
     }
 }
