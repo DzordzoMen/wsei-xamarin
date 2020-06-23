@@ -3,6 +3,7 @@ using AirMonitor.Views;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -18,9 +19,7 @@ namespace AirMonitor.ViewModels {
         private INavigation _navigation;
         private Location _userLocation = new Location(50.049683, 19.944544);
 
-        private IEnumerable<Measurement> MeasurmentList;
-
-        private IEnumerable<Installation> Installations;
+        private List<Measurement> _measurments;
 
         public HomeViewModel(INavigation navigation) {
             _navigation = navigation;
@@ -29,19 +28,19 @@ namespace AirMonitor.ViewModels {
 
         private async Task Init() {
             await GetLocation();
-            string urlProps = GetQuery(new Dictionary<string, object>() {
-                { "lat", _userLocation.Latitude },
-                { "lng", _userLocation.Longitude },
-                { "maxDistanceKM", 5 },
-                { "maxResults", 1 }
-            });
-            string path = "installations/nearest";
-            var installations = await GetNearestInstallations(path, urlProps);
-            Installations = installations;
+            var installations = await GetNearestInstallations();
             if (installations != null) {
                 var data = await GetInstallationsInfo(installations);
-                MeasurmentList = data;
-                System.Diagnostics.Debug.WriteLine(data);
+                Measurments = new List<Measurement>(data);
+            }
+        }
+
+        public List<Measurement> Measurments {
+            get { return _measurments; }
+            set {
+                if (_measurments == value) return;
+                _measurments = value;
+                ExecutePropertyChanged("Measurments");
             }
         }
 
@@ -107,7 +106,14 @@ namespace AirMonitor.ViewModels {
             return query.ToString();
         }
 
-        public async Task<IEnumerable<Installation>> GetNearestInstallations(string path, string urlProps) {
+        public async Task<IEnumerable<Installation>> GetNearestInstallations() {
+            string urlProps = GetQuery(new Dictionary<string, object>() {
+                { "lat", _userLocation.Latitude },
+                { "lng", _userLocation.Longitude },
+                { "maxDistanceKM", 5 },
+                { "maxResults", 1 }
+            });
+            string path = "installations/nearest";
             HttpClient client = SetHttpClient();
             // i hate myself and this url :)
             var response = await client.GetAsync(MakeUrl(path, urlProps));
@@ -140,6 +146,7 @@ namespace AirMonitor.ViewModels {
                 if ((int)response.StatusCode == 200) {
                     var content = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<Measurement>(content);
+                    result.Installation = installation;
                     measurements.Add(result);
                     System.Diagnostics.Debug.WriteLine(result);
                 }

@@ -9,5 +9,6 @@ namespace AirMonitor.Classes {
         public MeasurementValue Values { get; set; }
         public MeasurementIndex Indexes { get; set; }
         public MeasurementStandard Standards { get; set; }
+        public Installation Installation { get; set; }
     }
 }

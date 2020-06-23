@@ -2,13 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AirMonitor.Views.HomePage"
-             Title="Home Page"
-             BackgroundColor="{ StaticResource BackgroundColor }">
-    
-    <Button
-        Text="Details Page"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        Command="{ Binding GoToDetailsPage }"
-    ></Button>
+             xmlns:models="clr-namespace:AirMonitor.Classes"
+             Title="Home Page">
+    <Grid>
+        <ListView ItemsSource="{ Binding Measurments }">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{ Binding Installation.Address.Street }" Detail="{ Binding Installation.Address.City }" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </ContentPage>
