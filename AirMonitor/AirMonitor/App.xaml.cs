@@ -1,17 +1,22 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Threading.Tasks;
 using AirMonitor.Views;
+using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace AirMonitor {
     public partial class App : Application {
-        public static string AirlyApiKey = "e15E2TlDGElToTrs86heUlOU1WhUV1SV";
-        public static string AirplyApi = "https://airapi.airly.eu/v2/";
+        public static string AirlyApiKey;
+        public static string AirplyApi;
 
         public App() {
             InitializeComponent();
-
+            LoadConfig();
             MainPage = new NavigationPage(new AirMonitorNavigationPage());
         }
 
@@ -22,6 +27,20 @@ namespace AirMonitor {
         }
 
         protected override void OnResume() {
+        }
+
+        private async Task LoadConfig() {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetManifestResourceNames();
+            var config = resourceName.FirstOrDefault(name => name.Contains("config.json"));
+
+            using (Stream stream = assembly.GetManifestResourceStream(config))
+            using (StreamReader reader = new StreamReader(stream)) {
+                var result = await reader.ReadToEndAsync();
+                var parsedResult = JObject.Parse(result);
+                AirlyApiKey = parsedResult["ApiKey"].ToString();
+                AirplyApi = parsedResult["ApiURL"].ToString();
+            }
         }
     }
 }
