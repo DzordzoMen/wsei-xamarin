@@ -4,6 +4,8 @@ using System.Text;
 
 namespace AirMonitor.Classes {
     public class MeasurementItem {
+        public MeasurementItem() { }
+
         public DateTime FromDateTime { get; set; }
         public DateTime TillDateTime { get; set; }
         public MeasurementValue[] Values { get; set; }

@@ -2,10 +2,6 @@
 <ResourceDictionary
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Style TargetType="Label" x:Key="CaqiDescription">
-        <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
 
     <Style TargetType="StackLayout" x:Key="MainPageStackLayout">
         <Setter Property="Padding" Value="24" />
