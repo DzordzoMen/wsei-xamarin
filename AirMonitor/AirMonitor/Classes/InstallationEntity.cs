@@ -12,6 +12,6 @@ namespace AirMonitor.Classes {
         public string Address { get; set; }
         public Double Elevation { get; set; }
         public Boolean Airly { get; set; }
-        public Sponsor Sponsor { get; set; }
+        public string Sponsor { get; set; }
     }
 }

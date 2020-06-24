@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using AirMonitor.Classes;
 using AirMonitor.Views;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
@@ -14,9 +15,12 @@ namespace AirMonitor {
         public static string AirlyApiKey;
         public static string AirplyApi;
 
+        public static DatabaseHelper DatabaseHelper;
+
         public App() {
             InitializeComponent();
             LoadConfig();
+            DatabaseHelper = new DatabaseHelper();
             MainPage = new NavigationPage(new AirMonitorNavigationPage());
         }
 
