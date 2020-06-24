@@ -98,7 +98,6 @@ namespace AirMonitor.ViewModels {
         private string MakeUrl(string path, string query) {
             UriBuilder builder = new UriBuilder(App.AirplyApi);
             builder.Path += path;
-            builder.Port = -1;
             builder.Query = query;
             string url = builder.ToString();
 
