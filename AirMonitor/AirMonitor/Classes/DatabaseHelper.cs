@@ -16,5 +16,10 @@ namespace AirMonitor.Classes {
             DatabaseConnection.CreateTable<MeasurementIndex>();
         }
         public SQLiteConnection DatabaseConnection { get; set; }
+
+        public void SaveInstallationData(Installation installation) {
+            var installationEntity = new InstallationEntity(installation);
+            DatabaseConnection.Insert(installationEntity);
+        }
     }
 }

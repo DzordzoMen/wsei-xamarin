@@ -161,6 +161,7 @@ namespace AirMonitor.ViewModels {
                 if ((int)response.StatusCode == 200) {
                     var content = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<Measurement>(content);
+                    App.DatabaseHelper.SaveInstallationData(installation);
                     result.Installation = installation;
                     measurements.Add(result);
                     System.Diagnostics.Debug.WriteLine(result);
