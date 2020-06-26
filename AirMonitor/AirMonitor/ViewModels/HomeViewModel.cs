@@ -164,7 +164,7 @@ namespace AirMonitor.ViewModels {
                     App.DatabaseHelper.SaveInstallationData(installation);
                     result.Installation = installation;
                     measurements.Add(result);
-                    System.Diagnostics.Debug.WriteLine(result);
+                    App.DatabaseHelper.SaveMeasurementData(result);
                 }
                 else {
                     System.Diagnostics.Debug.WriteLine("I once again asking for help");

@@ -21,5 +21,10 @@ namespace AirMonitor.Classes {
             var installationEntity = new InstallationEntity(installation);
             DatabaseConnection.Insert(installationEntity);
         }
+
+        public void SaveMeasurementData(Measurement measurement) {
+            var measurementEntity = new MeasurementEntity(measurement);
+            DatabaseConnection.Insert(measurementEntity);
+        }
     }
 }
