@@ -59,11 +59,15 @@ namespace AirMonitor.Classes {
                 var valuesIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Values);
                 var indexIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Indexes);
                 var standardIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Standards);
-                var values = DatabaseConnection.Table<MeasurementValue>().Where(s => valuesIds.Contains(s.Id)).ToArray();
-                var indexes = DatabaseConnection.Table<MeasurementIndex>().Where(s => indexIds.Contains(s.Id)).ToArray();
-                var standards = DatabaseConnection.Table<MeasurementStandard>().Where(s => standardIds.Contains(s.Id)).ToArray();
+                var values = DatabaseConnection.Table<MeasurementValue>().Where(measurementValue => valuesIds.Contains(measurementValue.Id)).ToArray();
+                var indexes = DatabaseConnection.Table<MeasurementIndex>().Where(measurementIndex => indexIds.Contains(measurementIndex.Id)).ToArray();
+                var standards = DatabaseConnection.Table<MeasurementStandard>().Where(measurementstandard => standardIds.Contains(measurementstandard.Id)).ToArray();
 
-                return new MeasurementItem(entity, values, indexes, standards);
+                var measurementItem =  new MeasurementItem(measurementItemEntity, values, indexes, standards);
+
+                var installationWithId = DatabaseConnection.Get<InstallationEntity>(s.Installation);
+                var installation = new Installation(installationWithId);
+                return new Measurement(measurementItem, installation);
             });
         }
     }

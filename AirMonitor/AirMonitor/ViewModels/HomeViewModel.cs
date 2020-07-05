@@ -122,61 +122,77 @@ namespace AirMonitor.ViewModels {
         }
 
         public async Task<IEnumerable<Installation>> GetNearestInstallations() {
-            string urlProps = GetQuery(new Dictionary<string, object>() {
-                { "lat", _userLocation.Latitude },
-                { "lng", _userLocation.Longitude },
-                { "maxDistanceKM", 5 },
-                { "maxResults", 1 }
-            });
-            string path = "installations/nearest";
-            HttpClient client = SetHttpClient();
-            
-            var response = await client.GetAsync(MakeUrl(path, urlProps));
+            if (DatabaseDataIsOlderThanOndeHour()) {
+                string urlProps = GetQuery(new Dictionary<string, object>() {
+                    { "lat", _userLocation.Latitude },
+                    { "lng", _userLocation.Longitude },
+                    { "maxDistanceKM", 5 },
+                    { "maxResults", 1 }
+                });
+                string path = "installations/nearest";
+                HttpClient client = SetHttpClient();
 
-            if (response.Headers.TryGetValues("X-RateLimit-Remaining-day", out var limitLeft)) {
-                System.Diagnostics.Debug.WriteLine($"Pozostało w tym dniu {limitLeft} zapytań do zrobienia");
-            }
+                var response = await client.GetAsync(MakeUrl(path, urlProps));
 
-            if ((int)response.StatusCode == 200) {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<Installation>>(content);
-                System.Diagnostics.Debug.WriteLine(result);
-                return result;
+                if (response.Headers.TryGetValues("X-RateLimit-Remaining-day", out var limitLeft)) {
+                    System.Diagnostics.Debug.WriteLine($"Pozostało w tym dniu {limitLeft} zapytań do zrobienia");
+                }
+
+                if ((int)response.StatusCode == 200) {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<List<Installation>>(content);
+                    System.Diagnostics.Debug.WriteLine(result);
+                    return result;
+                }
+                else {
+                    System.Diagnostics.Debug.WriteLine("400 Bad Request");
+                }
             } else {
-                System.Diagnostics.Debug.WriteLine("400 Bad Request");
+                return App.DatabaseHelper.GetInstallations();
             }
             return null;
 
         }
 
         public async Task<IEnumerable<Measurement>> GetInstallationsInfo(IEnumerable<Installation> installations) {
-            HttpClient client = SetHttpClient();
-            var measurements = new List<Measurement>();
+            if (DatabaseDataIsOlderThanOndeHour()) {
+                HttpClient client = SetHttpClient();
+                var measurements = new List<Measurement>();
 
-            #region clear database
-            App.DatabaseHelper.ClearInstallationData();
-            App.DatabaseHelper.ClearMeasurementData();
-            #endregion
+                #region clear database
+                App.DatabaseHelper.ClearInstallationData();
+                App.DatabaseHelper.ClearMeasurementData();
+                #endregion
 
-            foreach (var installation in installations) {
-                string urlProps = GetQuery(new Dictionary<string, object>() {
+                foreach (var installation in installations) {
+                    string urlProps = GetQuery(new Dictionary<string, object>() {
                     { "installationId", installation.Id },
                 });
-                var url = MakeUrl("measurements/installation", urlProps);
-                var response = await client.GetAsync(url);
-                if ((int)response.StatusCode == 200) {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<Measurement>(content);
-                    App.DatabaseHelper.SaveInstallationData(installation);
-                    result.Installation = installation;
-                    measurements.Add(result);
-                    App.DatabaseHelper.SaveMeasurementData(result);
+                    var url = MakeUrl("measurements/installation", urlProps);
+                    var response = await client.GetAsync(url);
+                    if ((int)response.StatusCode == 200) {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<Measurement>(content);
+                        App.DatabaseHelper.SaveInstallationData(installation);
+                        result.Installation = installation;
+                        measurements.Add(result);
+                        App.DatabaseHelper.SaveMeasurementData(result);
+                    }
+                    else {
+                        System.Diagnostics.Debug.WriteLine("I once again asking for help");
+                    }
                 }
-                else {
-                    System.Diagnostics.Debug.WriteLine("I once again asking for help");
-                }
+                return measurements;
+            } else {
+                return App.DatabaseHelper.GetMeasurements();
             }
-            return measurements;
+        }
+
+        private bool DatabaseDataIsOlderThanOndeHour() {
+            var measurementDataFromDB = App.DatabaseHelper.GetMeasurements();
+            if (measurementDataFromDB.Count() == 0) return true;
+            var isMeasurementOld = measurementDataFromDB.Any(measurement => measurement.Current.TillDateTime.AddMinutes(60) < DateTime.UtcNow);
+            return isMeasurementOld;
         }
     }
 }

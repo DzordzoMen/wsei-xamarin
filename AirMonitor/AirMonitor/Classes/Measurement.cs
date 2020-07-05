@@ -6,6 +6,11 @@ namespace AirMonitor.Classes {
     public class Measurement {
         public Measurement() { }
 
+        public Measurement(MeasurementItem measurementItem, Installation installation) {
+            Current = measurementItem;
+            Installation = installation;
+        }
+
         public MeasurementItem Current { get; set; }
         public MeasurementItem[] History { get; set; }
         public MeasurementItem[] Forecast { get; set; }
