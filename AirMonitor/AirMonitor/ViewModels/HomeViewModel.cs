@@ -19,13 +19,22 @@ namespace AirMonitor.ViewModels {
     class HomeViewModel: BaseViewModel {
         private INavigation _navigation;
         private Location _userLocation = new Location(50.049683, 19.944544);
-        private Boolean _isLoading = false;
-        public Boolean IsLoading {
+        private bool _isLoading = false;
+        public bool IsLoading {
             get { return _isLoading; }
             set {
                 if (_isLoading == value) return;
                 _isLoading = value;
                 ExecutePropertyChanged("IsLoading");
+            }
+        }
+        private bool _isRefreshing;
+        public bool IsRefreshing {
+            get { return _isRefreshing; }
+            set {
+                if (_isRefreshing == value) return;
+                _isRefreshing = value;
+                ExecutePropertyChanged("IsRefreshing");
             }
         }
 
@@ -40,9 +49,9 @@ namespace AirMonitor.ViewModels {
             IsLoading = true;
             await Task.Run(async () => {
                 await GetLocation();
-                var installations = await GetNearestInstallations();
+                var installations = await GetNearestInstallations(false);
                 if (installations != null) {
-                    var data = await GetInstallationsInfo(installations);
+                    var data = await GetInstallationsInfo(installations, false);
                     Measurments = new List<Measurement>(data);
                 }
             });
@@ -123,8 +132,8 @@ namespace AirMonitor.ViewModels {
             return query.ToString();
         }
 
-        public async Task<IEnumerable<Installation>> GetNearestInstallations() {
-            if (DatabaseDataIsOlderThanOndeHour()) {
+        public async Task<IEnumerable<Installation>> GetNearestInstallations(bool refreshPage) {
+            if (refreshPage || DatabaseDataIsOlderThanOndeHour()) {
                 string urlProps = GetQuery(new Dictionary<string, object>() {
                     { "lat", _userLocation.Latitude },
                     { "lng", _userLocation.Longitude },
@@ -156,8 +165,8 @@ namespace AirMonitor.ViewModels {
 
         }
 
-        public async Task<IEnumerable<Measurement>> GetInstallationsInfo(IEnumerable<Installation> installations) {
-            if (DatabaseDataIsOlderThanOndeHour()) {
+        public async Task<IEnumerable<Measurement>> GetInstallationsInfo(IEnumerable<Installation> installations, bool refreshPage) {
+            if (refreshPage || DatabaseDataIsOlderThanOndeHour()) {
                 HttpClient client = SetHttpClient();
                 var measurements = new List<Measurement>();
 
@@ -195,6 +204,21 @@ namespace AirMonitor.ViewModels {
             if (measurementDataFromDB.Count() == 0) return true;
             var isMeasurementOld = measurementDataFromDB.Any(measurement => measurement.Current.TillDateTime.AddMinutes(60) < DateTime.UtcNow);
             return isMeasurementOld;
+        }
+
+        private async Task OnRefreshCommand() {
+            IsRefreshing = true;
+
+            await Task.Run(async () => {
+                await GetLocation();
+                var installations = await GetNearestInstallations(true);
+                if (installations != null) {
+                    var data = await GetInstallationsInfo(installations, true);
+                    Measurments = new List<Measurement>(data);
+                }
+            });
+
+            IsRefreshing = false;
         }
     }
 }

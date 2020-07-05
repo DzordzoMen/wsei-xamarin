@@ -18,8 +18,8 @@ namespace AirMonitor.Views {
         }
 
         void Select(object sender, ItemTappedEventArgs e) {
-            var tt = (HomeViewModel)BindingContext;
-            tt.GoToDetailsPage.Execute(e.Item as Measurement);
+            var homeViewModel = (HomeViewModel)BindingContext;
+            homeViewModel.GoToDetailsPage.Execute(e.Item as Measurement);
         }
     }
 }
