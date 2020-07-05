@@ -19,21 +19,29 @@ namespace AirMonitor.Classes {
         public void SaveInstallationData(Installation installation) {
             var installationEntity = new InstallationEntity(installation);
             DatabaseConnection.RunInTransaction(() => {
-                DatabaseConnection.DeleteAll<InstallationEntity>();
                 DatabaseConnection.Insert(installationEntity);
             });
         }
 
+        public void ClearInstallationData() {
+            DatabaseConnection.DeleteAll<InstallationEntity>();
+        }
+
+        public void ClearMeasurementData() {
+            DatabaseConnection.DeleteAll<MeasurementEntity>();
+            DatabaseConnection.DeleteAll<MeasurementItemEntity>();
+            DatabaseConnection.DeleteAll<MeasurementValue>();
+            DatabaseConnection.DeleteAll<MeasurementIndex>();
+        }
+
         public void SaveMeasurementData(Measurement measurement) {
             var measurementEntity = new MeasurementEntity(measurement);
+            var measurementItemEntity = new MeasurementItemEntity(measurement.Current);
             DatabaseConnection.RunInTransaction(() => {
-                DatabaseConnection.DeleteAll<MeasurementEntity>();
-                DatabaseConnection.DeleteAll<MeasurementItemEntity>();
-                DatabaseConnection.DeleteAll<MeasurementValue>();
-                DatabaseConnection.DeleteAll<MeasurementIndex>();
-
-                
                 DatabaseConnection.Insert(measurementEntity);
+                DatabaseConnection.Insert(measurementItemEntity);
+                DatabaseConnection.Insert(measurementEntity.History);
+                DatabaseConnection.Insert(measurementEntity.Forecast);
             });
         }
     }

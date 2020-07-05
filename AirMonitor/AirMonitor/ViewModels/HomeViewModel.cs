@@ -152,6 +152,12 @@ namespace AirMonitor.ViewModels {
         public async Task<IEnumerable<Measurement>> GetInstallationsInfo(IEnumerable<Installation> installations) {
             HttpClient client = SetHttpClient();
             var measurements = new List<Measurement>();
+
+            #region clear database
+            App.DatabaseHelper.ClearInstallationData();
+            App.DatabaseHelper.ClearMeasurementData();
+            #endregion
+
             foreach (var installation in installations) {
                 string urlProps = GetQuery(new Dictionary<string, object>() {
                     { "installationId", installation.Id },
