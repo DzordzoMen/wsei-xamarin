@@ -38,12 +38,14 @@ namespace AirMonitor.ViewModels {
 
         private async Task Init() {
             IsLoading = true;
-            await GetLocation();
-            var installations = await GetNearestInstallations();
-            if (installations != null) {
-                var data = await GetInstallationsInfo(installations);
-                Measurments = new List<Measurement>(data);
-            }
+            await Task.Run(async () => {
+                await GetLocation();
+                var installations = await GetNearestInstallations();
+                if (installations != null) {
+                    var data = await GetInstallationsInfo(installations);
+                    Measurments = new List<Measurement>(data);
+                }
+            });
             IsLoading = false;
         }
 
