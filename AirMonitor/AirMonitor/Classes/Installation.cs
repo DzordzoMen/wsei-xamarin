@@ -3,9 +3,7 @@ using Xamarin.Essentials;
 
 namespace AirMonitor.Classes {
     public class Installation {
-        public Installation() { }
-
-        public string Id { get; set; }
+        public int Id { get; set; }
         public Location Location { get; set; }
         public Address Address { get; set; }
         public Double Elevation { get; set; }

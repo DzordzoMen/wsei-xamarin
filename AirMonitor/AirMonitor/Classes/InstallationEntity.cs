@@ -8,7 +8,7 @@ namespace AirMonitor.Classes {
     class InstallationEntity {
         public InstallationEntity() { }
         public InstallationEntity(Installation installation) {
-            Id = installation.Id;
+            Id = installation.Id.ToString();
             Location = JsonConvert.SerializeObject(installation.Location);
             Address = JsonConvert.SerializeObject(installation.Address);
             Elevation = installation.Elevation;

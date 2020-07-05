@@ -130,7 +130,7 @@ namespace AirMonitor.ViewModels {
             });
             string path = "installations/nearest";
             HttpClient client = SetHttpClient();
-            // i hate myself and this url :)
+            
             var response = await client.GetAsync(MakeUrl(path, urlProps));
 
             if (response.Headers.TryGetValues("X-RateLimit-Remaining-day", out var limitLeft)) {
@@ -143,7 +143,7 @@ namespace AirMonitor.ViewModels {
                 System.Diagnostics.Debug.WriteLine(result);
                 return result;
             } else {
-                System.Diagnostics.Debug.WriteLine("Pomocy");
+                System.Diagnostics.Debug.WriteLine("400 Bad Request");
             }
             return null;
 
