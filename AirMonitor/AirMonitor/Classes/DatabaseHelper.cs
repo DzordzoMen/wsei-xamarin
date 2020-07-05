@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,6 +50,21 @@ namespace AirMonitor.Classes {
 
         public IEnumerable<Installation> GetInstallations() {
             return DatabaseConnection.Table<InstallationEntity>().Select(installations => new Installation(installations)).ToList();
+        }
+
+        public IEnumerable<Measurement> GetMeasurements() {
+            return DatabaseConnection.Table<MeasurementEntity>().Select(s => {
+                int id = s.Id;
+                var measurementItemEntity = DatabaseConnection.Get<MeasurementItemEntity>(id);
+                var valuesIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Values);
+                var indexIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Indexes);
+                var standardIds = JsonConvert.DeserializeObject<int[]>(measurementItemEntity.Standards);
+                var values = DatabaseConnection.Table<MeasurementValue>().Where(s => valuesIds.Contains(s.Id)).ToArray();
+                var indexes = DatabaseConnection.Table<MeasurementIndex>().Where(s => indexIds.Contains(s.Id)).ToArray();
+                var standards = DatabaseConnection.Table<MeasurementStandard>().Where(s => standardIds.Contains(s.Id)).ToArray();
+
+                return new MeasurementItem(entity, values, indexes, standards);
+            });
         }
     }
 }

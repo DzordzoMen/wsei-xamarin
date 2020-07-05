@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 namespace AirMonitor.Classes {
-    class MeasurementItemEntity {
+    public class MeasurementItemEntity {
         public MeasurementItemEntity() { }
 
         public MeasurementItemEntity(MeasurementItem measurementItem) {
