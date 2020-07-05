@@ -25,12 +25,16 @@ namespace AirMonitor {
         }
 
         protected override void OnStart() {
+            if (DatabaseHelper == null) DatabaseHelper = new DatabaseHelper();
         }
 
         protected override void OnSleep() {
+            DatabaseHelper.Dispose();
+            DatabaseHelper = null;
         }
 
         protected override void OnResume() {
+            if (DatabaseHelper == null) DatabaseHelper = new DatabaseHelper();
         }
 
         private async Task LoadConfig() {

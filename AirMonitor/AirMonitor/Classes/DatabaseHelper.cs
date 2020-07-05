@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 
 namespace AirMonitor.Classes {
-    public class DatabaseHelper {
+    public class DatabaseHelper: IDisposable {
         public DatabaseHelper() {
             var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "MyData.db");
 
@@ -69,6 +69,11 @@ namespace AirMonitor.Classes {
                 var installation = new Installation(installationWithId);
                 return new Measurement(measurementItem, installation);
             });
+        }
+
+        public void Dispose() {
+            DatabaseConnection.Dispose();
+            DatabaseConnection = null;
         }
     }
 }
