@@ -1,6 +1,8 @@
 ﻿using SQLite;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AirMonitor.Classes {
     public class DatabaseHelper {
@@ -43,6 +45,10 @@ namespace AirMonitor.Classes {
                 DatabaseConnection.Insert(measurementEntity.History);
                 DatabaseConnection.Insert(measurementEntity.Forecast);
             });
+        }
+
+        public IEnumerable<Installation> GetInstallations() {
+            return DatabaseConnection.Table<InstallationEntity>().Select(installations => new Installation(installations)).ToList();
         }
     }
 }

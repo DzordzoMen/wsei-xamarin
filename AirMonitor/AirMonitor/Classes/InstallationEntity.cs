@@ -5,10 +5,10 @@ using System.Text;
 using Xamarin.Essentials;
 
 namespace AirMonitor.Classes {
-    class InstallationEntity {
+    public class InstallationEntity {
         public InstallationEntity() { }
         public InstallationEntity(Installation installation) {
-            Id = installation.Id.ToString();
+            Id = installation.Id;
             Location = JsonConvert.SerializeObject(installation.Location);
             Address = JsonConvert.SerializeObject(installation.Address);
             Elevation = installation.Elevation;
